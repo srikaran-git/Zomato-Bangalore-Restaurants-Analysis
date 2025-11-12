@@ -52,78 +52,9 @@ The main cleaning tasks included:
     * Dropped the old, "dirty" columns (`rate`, `approx_cost_for_two_people`) after verifying the new, clean columns.
 
 ## 📈 Exploratory Data Analysis & Insights
+## ppt can be viewed after downloading
 
-After cleaning, the following questions were analyzed:
 
-### 1. What are the most common restaurant types?
-* **Insight:** The market is overwhelmingly dominated by **Quick Bites** (19,132 restaurants) and **Casual Dining** (10,330 restaurants). This suggests a high demand for fast, convenient, and informal dining.
-
-```sql
--- Query Used:
-SELECT
-    rest_type,
-    COUNT(*) AS restaurant_count
-FROM restaurants
-WHERE rest_type IS NOT NULL
-GROUP BY rest_type
-ORDER BY restaurant_count DESC
-LIMIT 10;
-```
-
-### 2. Which restaurant chains have the most branches?
-* **Insight:** **Cafe Coffee Day** (96 branches) and **Onesta** (85 branches) are the largest chains, highlighting the scalability of cafe and casual pizza models.
-
-```sql
--- Query Used:
-SELECT `name`, COUNT(`name`)
-FROM restaurants
-GROUP BY `name`
-ORDER BY COUNT(`name`) DESC
-LIMIT 5;
-```
-
-### 3. How does online ordering affect ratings?
-* **Insight:** The impact is minimal. While more restaurants offer online ordering (30.4k) than don't (21.2k), the average rating is nearly identical.
-    * **Accepts Online Orders:** 3.72 Average Rating
-    * **Doesn't Accept:** 3.66 Average Rating
-
-```sql
--- Query Used:
-SELECT
-    online_order,
-    COUNT(*) AS num_restaurants,
-    ROUND(AVG(rate_numeric), 2) AS avg_rating
-FROM restaurants
-WHERE online_order IS NOT NULL
-GROUP BY online_order;
-```
-
-### 4. What is the distribution of restaurant ratings?
-* **Insight:** The vast majority of restaurants **(30,192)** fall into the "Average" 3.0-4.0 rating bracket. Only **9,216** restaurants achieved a "High" rating (above 4.0), showing that high customer satisfaction is a significant differentiator.
-
-```sql
--- Query Used:
-SELECT
-    COUNT(CASE WHEN rate_numeric > 4.0 THEN 1 END) AS high_rating,
-    COUNT(CASE WHEN rate_numeric BETWEEN 3.0 AND 4.0 THEN 1 END) AS average_rating,
-    COUNT(CASE WHEN rate_numeric < 3.0 THEN 1 END) AS low_rating
-FROM restaurants;
-```
-
-### 5. What is the average rating and cost by location?
-* **Insight:** *(This is where you would add your findings from the location query).*
-* **Example:** "The analysis showed that locations like [Your-Top-Location] have a high average rating (e.g., 4.2) while maintaining a low average cost (e.g., ₹600), making them 'best value' neighborhoods. In contrast, [Your-Premium-Location] has the highest ratings but also the highest costs."
-
-```sql
--- Query Used:
-SELECT
-    location,
-    ROUND(AVG(rate_numeric), 2) AS avg_rating,
-    ROUND(AVG(cost_for_two_int), 2) AS avg_cost_for_two
-FROM restaurants
-GROUP BY location
-ORDER BY avg_rating DESC, avg_cost_for_two ASC;
-```
 
 ## 📋 How to Use
 
@@ -138,4 +69,5 @@ ORDER BY avg_rating DESC, avg_cost_for_two ASC;
     * Download the `zomato.csv` file from the [Kaggle link](https://www.kaggle.com/datasets/himanshupandey/zomato-bangalore-restaurants).
     * Load the CSV into your table. You may need to use the `LOAD DATA LOCAL INFILE` command.
 4.  **Run Analysis:**
+
     * Execute the `[your-file-name].sql` file in your MySQL client to perform all cleaning and analysis steps.
